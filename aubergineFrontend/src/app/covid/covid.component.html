@@ -1,0 +1,143 @@
+<div class="form-group">
+  <label for="sel1">Select Country:</label>
+  <select
+    class="form-control"
+    id="selcountry"
+    #selcountry
+    (change)="getSingleCountryData(selcountry.value)"
+    style="max-width: 50%"
+  >
+    <option
+      *ngFor="let country of countriesList"
+      [value]="country.code"
+      [selected]="country.name == globalCountryName ? true : null"
+      id="{{ country.name }}"
+    >
+      {{ country.name }}
+    </option>
+  </select>
+
+  <br />
+
+  <label for="sel2">Select TimeLine:</label>
+  <select
+    class="form-control"
+    id="timeline"
+    #timeline
+    style="max-width: 50%"
+    (change)="defineTimeLine(timeline.value)"
+  >
+    <option value="5">Last 5 Days</option>
+    <option value="10">Last 10 Days</option>
+    <option value="15" selected>Last 15 Days</option>
+    <option value="30">Last 1 Month</option>
+    <option value="60">Last 2 Months</option>
+    <option value="90">Last 3 Months</option>
+    <option value="120">Last 4 Months</option>
+  </select>
+</div>
+
+<button
+  type="button"
+  id="graphBtn"
+  class="btn btn-primary"
+  (click)="generateGraph('show')"
+>
+  Generate Graph
+</button>
+
+<button
+  style="margin-left: 25px"
+  type="button"
+  id="dataBtn"
+  class="btn btn-primary"
+  (click)="generateData()"
+>
+  Generate TimeLine Data
+</button>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>
+        <h2><b>Active</b></h2>
+      </th>
+      <th>
+        <h2><b>Confirmed</b></h2>
+      </th>
+      <th>
+        <h2><b>Critical</b></h2>
+      </th>
+      <th>
+        <h2><b>Deaths</b></h2>
+      </th>
+      <th>
+        <h2><b>Recovered</b></h2>
+      </th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="color: yellow; font-size: 40px">
+        {{ singleCountryJson.active }}
+      </td>
+      <td style="color: blue; font-size: 40px">
+        {{ singleCountryJson.confirmed }}
+      </td>
+      <td style="color: orange; font-size: 40px">
+        {{ singleCountryJson.critical }}
+      </td>
+      <td style="color: red; font-size: 40px">
+        {{ singleCountryJson.deaths }}
+      </td>
+      <td style="color: green; font-size: 40px">
+        {{ singleCountryJson.recovered }}
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<br />
+<br />
+<h1 style="margin-left: 42%">TimeLine Data</h1>
+
+<div *ngIf="isPlotData" id="plotData">
+
+<button
+  *ngIf ="isExportBtn"
+  type="button"
+  id="exportBtn"
+  class="btn btn-primary"
+  (click)="generateGraph('download')"
+  style = "margin-left:35px"
+>Export Graph as Image</button>
+</div>
+
+<div *ngIf="isTextData" id="textData">
+  <table class="table table-striped" style="max-width: 70%" align="center">
+    <thead>
+      <tr>
+        <th>
+          <h5><b>Date</b></h5>
+        </th>
+        <th>
+          <h5><b>Confirmed</b></h5>
+        </th>
+        <th>
+          <h5><b>Recovered</b></h5>
+        </th>
+        <th>
+          <h5><b>Deaths</b></h5>
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let td of timeLineData">
+        <td>{{ td.date }}</td>
+        <td>{{ td.new_confirmed }}</td>
+        <td>{{ td.new_recovered }}</td>
+        <td>{{ td.new_deaths }}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
